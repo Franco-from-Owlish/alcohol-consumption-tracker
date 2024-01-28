@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    hostname: postgres
+    restart: always
+    env_file:
+      - env/.env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker/volumes/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER}" ]
+      start_period: 30s
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      patrons-network:
+        ipv4_address: 172.16.238.10
+
+  migrate:
+    container_name: migrate
+    build:
+      context: .
+      dockerfile: docker/migrate.dockerfile
+    command: "migrate apply --env deploy"
+    env_file:
+      - env/.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend/migrations/:/migrations
+    networks:
+      patrons-network:
+        ipv4_address: 172.16.238.11
+
+  golang:
+    container_name: golang
+    hostname: golang
+    build:
+      context: .
+      dockerfile: ./docker/dev.dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    env_file:
+      - env/.env
+    ports:
+      - "8080:8080"
+    restart: always
+    volumes:
+      - ./backend/:/app/backend/
+      - .air.toml/:/app/.air.toml
+    networks:
+      patrons-network:
+        ipv4_address: 172.16.238.12
+
+
+networks:
+  patrons-network:
+    name: patrons-network
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+          gateway: 172.16.238.1
