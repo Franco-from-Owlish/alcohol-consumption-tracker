@@ -43,6 +43,9 @@ sketch
 # File system
 .DS_Store
 
+# Docker volumes
+docker/volumes
+
 # Environemt files
 *.env
 !*.sample.env
