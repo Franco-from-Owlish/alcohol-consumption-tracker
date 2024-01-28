@@ -40,7 +40,7 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ./backend/migrations/:/migrations
+      - ./backend/migrations/:/app/migrations
     networks:
       patrons-network:
         ipv4_address: 172.16.238.11

@@ -49,3 +49,6 @@ docker/volumes
 # Environemt files
 *.env
 !*sample.env
+
+# Executables
+backend/bin

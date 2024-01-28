@@ -17,25 +17,25 @@ func NewPatronService(db *gorm.DB) *PatronService {
 	}
 }
 
-func (s *PatronService) CreatePatron(Patron *patrons.Patron) error {
-	return s.DB.Create(&Patron).Error
+func (s *PatronService) CreatePatron(patron *patrons.Patron) error {
+	return s.DB.Create(&patron).Error
 }
 
-func (s *PatronService) UpdatePatron(Patron *patrons.Patron) error {
-	return s.DB.Save(&Patron).Error
+func (s *PatronService) UpdatePatron(patron *patrons.Patron) error {
+	return s.DB.Save(&patron).Error
+}
+
+func (s *PatronService) UpdateConsumption(patron *patrons.Patron) error {
+	// TODO implement
+	panic("not implemented")
 }
 
 // GetPatronByID implements PatronService
 // Gets a Patron from their ID.
 func (s *PatronService) GetPatronByID(id string) (*patrons.Patron, error) {
-	Patron := patrons.Patron{}
-	if result := s.DB.First(&Patron, "id = ?", id); result.Error != nil {
+	patron := patrons.Patron{}
+	if result := s.DB.First(&patron, "id = ?", id); result.Error != nil {
 		return nil, result.Error
 	}
-	return &Patron, nil
-}
-
-func (s *PatronService) UpdateConsumption(id uint) (*patrons.Patron, error) {
-	//TODO implement me
-	panic("implement me")
+	return &patron, nil
 }

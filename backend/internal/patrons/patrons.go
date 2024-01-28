@@ -21,8 +21,8 @@ type Patron struct {
 type PatronService interface {
 	CreatePatron(patron *Patron) error
 	UpdatePatron(patron *Patron) error
+	UpdateConsumption(patron *Patron) error
 	GetPatronByID(id string) (*Patron, error)
-	UpdateConsumption(id uint) (*Patron, error)
 }
 
 func (p *Patron) Validate() httpErrors.ValidationError {
