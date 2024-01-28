@@ -10,13 +10,12 @@ start: env/.env
 	docker compose --env-file env/.env up -d --build
 
 stop: env/.env
-	docker compose down
+	docker compose --env-file env/.env down
 
 restart: stop start
 
-soft-restart:
-	docker compose down
-	docker compose up -d
+soft-restart: stop
+	docker compose --env-file env/.env  up -d
 
 teardown:
 	docker compose down --rmi all
@@ -34,4 +33,4 @@ migrations:
 	cd backend && atlas migrate diff --env gorm
 
 migrate:
-	cd backend && atlas migrate apply --env gorm
+	cd backend && atlas migrate apply --env deploy

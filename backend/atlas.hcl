@@ -46,7 +46,7 @@ env "gorm" {
   dev = "docker://postgres/15/dev"
   url = "docker://postgres/15/dev"
   migration {
-    dir = "file://backend/migrations"
+    dir = "file://migrations"
   }
   format {
     migrate {
@@ -58,7 +58,7 @@ env "gorm" {
 env "deploy" {
   url = local.db_url
   migration {
-    dir = "file://backend/migrations"
+    dir = "file://migrations"
   }
   format {
     migrate {

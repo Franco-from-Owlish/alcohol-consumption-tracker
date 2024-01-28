@@ -48,4 +48,4 @@ docker/volumes
 
 # Environemt files
 *.env
-!*.sample.env
+!*sample.env
