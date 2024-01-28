@@ -8,6 +8,7 @@ type Cocktail struct {
 	LastName     string `gorm:"size:48" json:"lastName"`
 	Recipe       Recipe
 	TotalAlcohol float32 // alcoholic content in ml
+	OnMenu       bool
 }
 
 type Recipe struct {
