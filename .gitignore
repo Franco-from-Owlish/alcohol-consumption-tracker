@@ -38,10 +38,11 @@ thumb
 sketch
 
 # IDE
-.idea
+**.idea
+**.vscode
 
 # File system
-.DS_Store
+**.DS_Store
 
 # Docker volumes
 docker/volumes

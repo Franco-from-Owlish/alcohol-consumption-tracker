@@ -4,11 +4,13 @@ CREATE TABLE "public"."cocktails" (
   "created_at" timestamptz NULL,
   "updated_at" timestamptz NULL,
   "deleted_at" timestamptz NULL,
-  "first_name" character varying(48) NULL,
-  "last_name" character varying(48) NULL,
-  "total_alcohol" numeric NULL,
+  "name" character varying(48) NULL,
+  "total_alcohol" numeric NULL DEFAULT 0,
+  "on_menu" boolean NULL DEFAULT false,
   PRIMARY KEY ("id")
 );
+-- Create index "cocktails_name_key" to table: "cocktails"
+CREATE UNIQUE INDEX "cocktails_name_key" ON "public"."cocktails" ("name");
 -- Create index "idx_cocktails_deleted_at" to table: "cocktails"
 CREATE INDEX "idx_cocktails_deleted_at" ON "public"."cocktails" ("deleted_at");
 -- Create "patrons" table
@@ -39,7 +41,7 @@ CREATE TABLE "public"."ingredients" (
   "updated_at" timestamptz NULL,
   "deleted_at" timestamptz NULL,
   "name" character varying(48) NULL,
-  "abv" bigint NULL,
+  "abv" integer NULL,
   PRIMARY KEY ("id")
 );
 -- Create index "idx_ingredients_deleted_at" to table: "ingredients"

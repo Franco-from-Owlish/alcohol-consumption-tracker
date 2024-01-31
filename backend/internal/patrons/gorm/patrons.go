@@ -9,11 +9,13 @@ var _ patrons.PatronService = (*PatronService)(nil)
 
 type PatronService struct {
 	DB *gorm.DB
+	//IngredientService *cocktail
 }
 
 func NewPatronService(db *gorm.DB) *PatronService {
 	return &PatronService{
 		DB: db,
+		//IngredientService:
 	}
 }
 

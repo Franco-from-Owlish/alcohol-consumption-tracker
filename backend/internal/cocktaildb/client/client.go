@@ -27,5 +27,7 @@ func NewRequest(endpoint string, params Parameters) (*http.Request, error) {
 	for k, v := range params {
 		queries.Add(k, v)
 	}
+
+	request.URL.RawQuery = queries.Encode()
 	return request, nil
 }

@@ -16,6 +16,7 @@ func main() {
 		&cocktail.Cocktail{},
 		&cocktail.Recipe{},
 		&cocktail.Ingredient{},
+		&cocktail.RecipeIngredient{},
 	)
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "failed to load gorm schema: %v\n", err)

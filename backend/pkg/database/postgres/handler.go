@@ -24,7 +24,7 @@ func NewDatabase(user, password, port, host, name string) *Database {
 	)
 	return &Database{
 		User:     user,
-		Password: user,
+		Password: password,
 		Port:     port,
 		Host:     host,
 		Name:     name,

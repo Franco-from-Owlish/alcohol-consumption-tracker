@@ -28,10 +28,10 @@ runner = "green"
 watcher = "cyan"
 
 [log]
-time = false
+time = true
 
 [misc]
 clean_on_exit = true
 
 [screen]
-clear_on_rebuild = true
+clear_on_rebuild = false

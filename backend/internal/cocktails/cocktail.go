@@ -1,20 +1,37 @@
 package cocktail
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Cocktail struct {
 	gorm.Model
-	FirstName    string `gorm:"size:48" json:"firstName"`
-	LastName     string `gorm:"size:48" json:"lastName"`
+	Name         string `gorm:"size:48;unique" json:"name"`
 	Recipe       Recipe
-	TotalAlcohol float32 // alcoholic content in ml
-	OnMenu       bool
+	TotalAlcohol float32 `gorm:"default:0"` // alcoholic content in ml
+	OnMenu       bool    `gorm:"default:false"`
 }
 
 type Recipe struct {
-	ID         uint `gorm:"primarykey"`
+	gorm.Model
 	CocktailID uint
 
 	// Relationships
-	Ingredients []Ingredient `gorm:"many2many:recipe_ingredients;" json:"addresses,omitempty"` // has many
+	Ingredients []Ingredient `gorm:"many2many:recipe_ingredients;" json:"ingredients"` // has many
+}
+
+type RecipeIngredient struct {
+	RecipeID     int     `gorm:"primaryKey"`
+	IngredientID int     `gorm:"primaryKey"`
+	Amount       float32 `json:"amount"`
+	Unit         string  `gorm:"size:12" json:"unit"`
+}
+
+type CocktailsService interface {
+	GetAll() (*[]Cocktail, error)
+	GetRandom() (*Cocktail, error)
+	GetByName(name string) (*Cocktail, error)
+	GetCocktailRecipe(cocktail *Cocktail) error
+	AddToMenu(name string) error
+	UpdateCocktailAlcoholContent(cocktail *Cocktail) error
 }

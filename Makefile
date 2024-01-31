@@ -18,7 +18,7 @@ soft-restart: stop
 	docker compose --env-file env/.env  up -d
 
 teardown:
-	docker compose down --rmi all
+	docker compose --env-file env/.env  down --rmi all
 
 nuke: teardown
 	rm -r docker/volumes || true
