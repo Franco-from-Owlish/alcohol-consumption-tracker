@@ -37,4 +37,10 @@ func (s *Server) addPublicRoutes() {
 	public.GET("/health", func(context *gin.Context) {
 		context.Status(http.StatusOK)
 	})
+	public.GET("/", s.GetAll)
+	public.POST("/", s.CreatePatron)
+
+	public.GET("/:id", s.GetPatron)
+	public.DELETE("/:id", s.RemovePatron)
+	public.PUT("/:id", s.AddCocktail)
 }

@@ -40,12 +40,16 @@ func (s *CocktailsService) updateRecipeFromIngredientMap(recipe *cocktail.Recipe
 
 func (s *CocktailsService) newIngredientFromIngredientMeasurement(
 	name string) (cocktail.Ingredient, error) {
+	dbIngredient, errDB := s.IngredientService.GetByName(name)
+	if errDB == nil {
+		return *dbIngredient, errDB
+	}
 	ingredient, errFetch := s.CocktailDB.GetIngredient(name)
 	if errFetch != nil {
 		return cocktail.Ingredient{}, errFetch
 	}
 	return cocktail.Ingredient{
 		Name: ingredient.Name,
-		Abv:  ingredient.Abv * 100,
+		Abv:  ingredient.Abv,
 	}, nil
 }

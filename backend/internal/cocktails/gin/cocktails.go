@@ -56,6 +56,29 @@ func (s *Server) GetCocktail(c *gin.Context) {
 	c.JSON(http.StatusOK, cocktail)
 }
 
+func (s *Server) GetCocktailIngredients(c *gin.Context) {
+	name := c.Param("name")
+	cocktail, err := s.CocktailService.GetByName(name)
+	if err != nil {
+		databaseError := httpErrors.NewDatabaseError(
+			fmt.Sprintf("Fetching recipe for cocktail '%s' failed", name),
+			err,
+		)
+		c.AbortWithStatusJSON(http.StatusBadRequest, databaseError.JSON())
+		return
+	}
+	errRcp := s.CocktailService.GetCocktailIngredients(cocktail)
+	if errRcp != nil {
+		databaseError := httpErrors.NewDatabaseError(
+			fmt.Sprintf("Fetching cocktail '%s' ingredients failed", name),
+			errRcp,
+		)
+		c.AbortWithStatusJSON(http.StatusBadRequest, databaseError.JSON())
+		return
+	}
+	c.JSON(http.StatusOK, cocktail)
+}
+
 func (s *Server) GetCocktailRecipe(c *gin.Context) {
 	name := c.Param("name")
 	cocktail, err := s.CocktailService.GetByName(name)
@@ -67,7 +90,7 @@ func (s *Server) GetCocktailRecipe(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, databaseError.JSON())
 		return
 	}
-	errRcp := s.CocktailService.GetCocktailRecipe(cocktail)
+	recipe, errRcp := s.CocktailService.GetCocktailRecipe(cocktail)
 	if errRcp != nil {
 		databaseError := httpErrors.NewDatabaseError(
 			fmt.Sprintf("Fetching cocktail '%s' recipe failed", name),
@@ -76,7 +99,7 @@ func (s *Server) GetCocktailRecipe(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, databaseError.JSON())
 		return
 	}
-	c.JSON(http.StatusOK, cocktail)
+	c.JSON(http.StatusOK, recipe)
 }
 
 func (s *Server) AddCocktailToMenu(c *gin.Context) {

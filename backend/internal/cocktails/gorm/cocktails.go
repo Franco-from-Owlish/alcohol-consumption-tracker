@@ -55,14 +55,27 @@ func (s *CocktailsService) GetByName(name string) (*cocktail.Cocktail, error) {
 	return &drink, err
 }
 
-func (s *CocktailsService) GetCocktailRecipe(data *cocktail.Cocktail) error {
-	var ingredients []cocktail.Ingredient
-	err := s.DB.Preload("Recipe").Preload("Recipe.Ingredients").Find(&data).Error
-	fmt.Printf("\nRecipe: %v\n", data.Recipe)
-	//err := s.DB.Find(&ingredients)
-	fmt.Printf("\nIngredients: %v\n", ingredients)
-	data.Recipe.Ingredients = ingredients
-	return err
+func (s *CocktailsService) GetCocktailIngredients(data *cocktail.Cocktail) error {
+	return s.DB.Preload("Recipe").Preload("Recipe.Ingredients").
+		Find(&data).Error
+}
+
+func (s *CocktailsService) GetCocktailRecipe(data *cocktail.Cocktail) ([]map[string]interface{}, error) {
+	errRcp := s.DB.Preload("Recipe").Find(&data).Error
+	if errRcp != nil {
+		return nil, errRcp
+	}
+	var recipe []map[string]interface{}
+	err := s.DB.Table("recipe_ingredients").
+		Select("ingredients.name, recipe_ingredients.amount, recipe_ingredients.unit").
+		Joins("join ingredients on recipe_ingredients.ingredient_id = ingredients.id").
+		Where("recipe_ingredients.recipe_id = ?", data.Recipe.ID).
+		Find(&recipe).Error
+	if err != nil {
+		return nil, err
+	}
+	fmt.Printf("\nrecipe: %v\n", recipe)
+	return recipe, nil
 }
 
 func (s *CocktailsService) AddToMenu(name string) error {
@@ -75,7 +88,7 @@ func (s *CocktailsService) AddToMenu(name string) error {
 }
 
 func (s *CocktailsService) UpdateCocktailAlcoholContent(data *cocktail.Cocktail) error {
-	errRcp := s.GetCocktailRecipe(data)
+	errRcp := s.GetCocktailIngredients(data)
 	if errRcp != nil {
 		return errRcp
 	}
@@ -90,7 +103,7 @@ func (s *CocktailsService) UpdateCocktailAlcoholContent(data *cocktail.Cocktail)
 		if errRI != nil {
 			return errRI
 		}
-		sum += ing.Abv * recipeIngredient.Amount
+		sum += ing.Abv / 100 * recipeIngredient.Amount
 	}
 
 	data.TotalAlcohol = sum

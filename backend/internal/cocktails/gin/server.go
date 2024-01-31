@@ -35,7 +35,9 @@ func (s *Server) addPublicRoutes() {
 
 	public.GET("/", s.GetAllCocktails)
 	public.GET("/random", s.GetRandomCocktail)
+
 	public.GET("/:name", s.GetCocktail)
+	public.GET("/:name/ingredients", s.GetCocktailIngredients)
 	public.GET("/:name/recipe", s.GetCocktailRecipe)
-	public.GET("/:name/add", s.AddCocktailToMenu)
+	public.PUT("/:name/add", s.AddCocktailToMenu)
 }

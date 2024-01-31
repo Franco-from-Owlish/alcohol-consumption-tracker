@@ -2,26 +2,29 @@ package patrons
 
 import (
 	cocktail "alcohol-consumption-tracker/internal/cocktails"
+	"alcohol-consumption-tracker/pkg/database"
 	"alcohol-consumption-tracker/pkg/httpErrors"
-	"gorm.io/gorm"
 )
 
 type Patron struct {
-	gorm.Model
+	database.Model
 	FirstName string `gorm:"size:48" json:"firstName"`
 	LastName  string `gorm:"size:48" json:"lastName"`
 
 	// Relationships
-	Cocktails []cocktail.Cocktail `gorm:"many2many:patron_cocktails;" json:"addresses,omitempty"` // has many
+	Cocktails []cocktail.Cocktail `gorm:"many2many:patron_cocktails;" json:"cocktails,omitempty"` // has many
 
 	// Optimisations
-	TotalAlcohol float32 // alcoholic content in ml
+	TotalAlcohol float32 `json:"totalAlcohol"` // alcoholic content in ml
 }
 
 type PatronService interface {
+	GetAllPatrons() (*[]Patron, error)
 	CreatePatron(patron *Patron) error
 	UpdatePatron(patron *Patron) error
-	UpdateConsumption(patron *Patron) error
+	DeletePatron(patron *Patron) error
+	DeletePatronByID(id string) error
+	UpdateConsumption(patron *Patron, drink *cocktail.Cocktail) error
 	GetPatronByID(id string) (*Patron, error)
 }
 

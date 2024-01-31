@@ -22,19 +22,22 @@ func ConvertStrMeasure(measurement string) IngredientMeasurement {
 	}
 
 	for i := 0; i < partsCount-1; i++ {
-		switch parts[i] {
-		case "1/2":
-			value += 0.5
-		case "1/3":
-			value += 1 / 3
-		case "1/4":
-			value += 0.25
-		case "1/6":
-			value += 1 / 6
-		case "1/8":
-			value += 0.125
-		default:
-			parsedValue, errParse := strconv.ParseFloat(parts[i], 32)
+		part := parts[i]
+		if strings.Contains(part, "/") {
+			fractionParts := strings.Split(part, "/")
+			numerator, errParseN := strconv.ParseFloat(fractionParts[0], 32)
+			if errParseN != nil {
+				fmt.Printf("parsing numerator failed: %v", errParseN)
+				break
+			}
+			denominator, errParseD := strconv.ParseFloat(fractionParts[0], 32)
+			if errParseD != nil {
+				fmt.Printf("parsing denominator failed: %v", errParseD)
+				break
+			}
+			value += float32(numerator / denominator)
+		} else {
+			parsedValue, errParse := strconv.ParseFloat(part, 32)
 			if errParse != nil {
 				fmt.Printf("parse failed: %v", errParse)
 				break

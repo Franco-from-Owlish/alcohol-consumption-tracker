@@ -25,8 +25,8 @@ func NewIngredientsService(db *gorm.DB, datastore *redis.Client) *IngredientsSer
 }
 
 func (i IngredientsService) GetByName(name string) (*cocktail.Ingredient, error) {
-	var ing cocktail.Ingredient
-	errDB := i.DB.Find(&ing, "name = ?", name).Error
+	ing := cocktail.Ingredient{}
+	errDB := i.DB.Where("name = ?", name).First(&ing).Error
 	if errors.Is(errDB, gorm.ErrRecordNotFound) {
 		ingData, err := i.CocktailDB.GetIngredient(name)
 		if err != nil {
