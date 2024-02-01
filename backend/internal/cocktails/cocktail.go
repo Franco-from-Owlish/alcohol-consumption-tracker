@@ -8,7 +8,7 @@ type Cocktail struct {
 	database.Model
 	Name         string  `gorm:"size:48;unique" json:"name"`
 	Recipe       Recipe  `json:"recipe,omitempty"`
-	TotalAlcohol float32 `gorm:"default:0" json:"totalAlcohol"` // alcoholic content in ml
+	TotalAlcohol float64 `gorm:"default:0" json:"totalAlcohol"` // alcoholic content in ml
 	OnMenu       bool    `gorm:"default:false" json:"onMenu"`
 }
 
@@ -23,7 +23,7 @@ type Recipe struct {
 type RecipeIngredient struct {
 	RecipeID     int     `gorm:"primaryKey" json:"-"`
 	IngredientID int     `gorm:"primaryKey" json:"-"`
-	Amount       float32 `json:"amount"`
+	Amount       float64 `json:"amount"`
 	Unit         string  `gorm:"size:12" json:"unit"`
 }
 

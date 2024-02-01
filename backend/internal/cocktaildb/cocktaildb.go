@@ -3,7 +3,7 @@ package cocktaildb
 import "encoding/json"
 
 type IngredientMeasurement struct {
-	Value float32
+	Value float64
 	Unit  string
 }
 
@@ -17,7 +17,7 @@ type Cocktail struct {
 type Ingredient struct {
 	Id   string  `json:"id"`
 	Name string  `json:"name"`
-	Abv  float32 `json:"abv"`
+	Abv  float64 `json:"abv"`
 }
 
 type Service interface {

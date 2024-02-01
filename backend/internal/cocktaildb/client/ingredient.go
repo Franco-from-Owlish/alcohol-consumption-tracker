@@ -5,12 +5,12 @@ import (
 )
 
 type IngredientResponse struct {
-	IdIngredient   string `json:"idIngredient"`
-	StrIngredient  string `json:"strIngredient"`
-	StrDescription string `json:"strDescription"`
-	StrType        string `json:"strType"`
-	StrAlcohol     string `json:"strAlcohol"`
-	StrABV         int    `json:"strABV,string"`
+	IdIngredient   string  `json:"idIngredient"`
+	StrIngredient  string  `json:"strIngredient"`
+	StrDescription string  `json:"strDescription"`
+	StrType        string  `json:"strType"`
+	StrAlcohol     string  `json:"strAlcohol"`
+	StrABV         float64 `json:"strABV,string"`
 }
 
 func GetIngredient(name string) (*IngredientResponse, error) {
@@ -30,6 +30,6 @@ func (i *IngredientResponse) ToIngredient() cocktaildb.Ingredient {
 	return cocktaildb.Ingredient{
 		Id:   i.IdIngredient,
 		Name: i.StrIngredient,
-		Abv:  float32(i.StrABV),
+		Abv:  i.StrABV,
 	}
 }

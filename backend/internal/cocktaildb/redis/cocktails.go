@@ -85,6 +85,5 @@ func (c CocktailDbService) GetIngredient(name string) (*cocktaildb.Ingredient, e
 	}
 	var value cocktaildb.Ingredient
 	err := json.Unmarshal([]byte(data), &value)
-	fmt.Printf("\nIngredient:\n%v\n", string(value.JSON()))
 	return &value, err
 }

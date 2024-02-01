@@ -3,7 +3,9 @@ package gorm
 import (
 	cocktail "alcohol-consumption-tracker/internal/cocktails"
 	"alcohol-consumption-tracker/internal/patrons"
+	"alcohol-consumption-tracker/pkg/ebac"
 	"gorm.io/gorm"
+	"time"
 )
 
 var _ patrons.PatronService = (*PatronService)(nil)
@@ -38,7 +40,6 @@ func (s *PatronService) DeletePatronByID(id string) error {
 
 func (s *PatronService) UpdateConsumption(
 	patron *patrons.Patron, drink *cocktail.Cocktail) error {
-	patron.TotalAlcohol += drink.TotalAlcohol
 
 	tx := s.DB.Begin()
 	errAss := tx.Model(&patron).Association("Cocktails").Append(drink)
@@ -51,8 +52,32 @@ func (s *PatronService) UpdateConsumption(
 		tx.Rollback()
 		return errUpt
 	}
-	//tx.Preload("Cocktails").Find(&patron)
+
 	return tx.Commit().Error
+}
+
+func (s *PatronService) UpdateEBAC(patron *patrons.Patron) error {
+	now := time.Now()
+	var drinks []struct {
+		TotalAlcohol float64
+		CreatedAt    time.Time
+	}
+	patronEbac := 0.0
+
+	errFetch := s.DB.Table("cocktails").
+		Joins("join patron_cocktails on patron_cocktails.cocktail_id = cocktails.id").
+		Find(&drinks).
+		Error
+	if errFetch != nil {
+		return errFetch
+	}
+
+	for _, drink := range drinks {
+		patronEbac += ebac.CalculateEBAC(drink.TotalAlcohol, patron.Weight, patron.Sex, now, drink.CreatedAt)
+	}
+
+	patron.EBAC = patronEbac
+	return s.DB.Save(patron).Error
 }
 
 // GetAllPatrons implements PatronService
@@ -73,5 +98,5 @@ func (s *PatronService) GetPatronByID(id string) (*patrons.Patron, error) {
 		First(&patron, "id = ?", id); result.Error != nil {
 		return nil, result.Error
 	}
-	return &patron, nil
+	return &patron, s.UpdateEBAC(&patron)
 }

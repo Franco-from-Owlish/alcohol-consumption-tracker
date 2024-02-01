@@ -92,8 +92,10 @@ func (s *Server) AddCocktail(c *gin.Context) {
 
 // CreatePatronInput JSON binding for expected input to CreateUser
 type CreatePatronInput struct {
-	FirstName string `json:"firstName" binding:"required"`
-	LastName  string `json:"lastName" binding:"required"`
+	FirstName string  `json:"firstName" binding:"required"`
+	LastName  string  `json:"lastName" binding:"required"`
+	Weight    float64 `json:"weight" binding:"required"`
+	Sex       string  `json:"sex" binding:"required"`
 }
 
 // CreatePatron Creates a user
@@ -101,12 +103,15 @@ type CreatePatronInput struct {
 func (s *Server) CreatePatron(c *gin.Context) {
 	data := CreatePatronInput{}
 	if err := c.ShouldBindJSON(&data); err != nil {
-		c.JSON(http.StatusBadRequest, err)
+		pe := httpErrors.NewParseError("could not parse data", err)
+		c.JSON(pe.HTTPStatus, pe.JSON())
 		return
 	}
 	patron := patrons.Patron{
 		FirstName: data.FirstName,
 		LastName:  data.LastName,
+		Sex:       rune(data.Sex[0]),
+		Weight:    data.Weight,
 	}
 
 	// Validate user input

@@ -7,7 +7,7 @@ import (
 type Ingredient struct {
 	database.Model
 	Name string  `gorm:"size:48" json:"name"`
-	Abv  float32 `json:"abv"`
+	Abv  float64 `json:"abv"`
 }
 
 type IngredientsService interface {

@@ -74,7 +74,6 @@ func (s *CocktailsService) GetCocktailRecipe(data *cocktail.Cocktail) ([]map[str
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("\nrecipe: %v\n", recipe)
 	return recipe, nil
 }
 
@@ -93,7 +92,7 @@ func (s *CocktailsService) UpdateCocktailAlcoholContent(data *cocktail.Cocktail)
 		return errRcp
 	}
 
-	var sum float32 = 0.00
+	var sum = 0.00
 	for _, ing := range data.Recipe.Ingredients {
 		recipeIngredient := cocktail.RecipeIngredient{
 			RecipeID:     int(data.Recipe.ID),
