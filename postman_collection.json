@@ -1,0 +1,339 @@
+{
+	"info": {
+		"_postman_id": "7695d9d8-eec7-4d5c-a68a-26d353e461bc",
+		"name": "Alcohol Consumption Tracker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19259700"
+	},
+	"item": [
+		{
+			"name": "Cocktails",
+			"item": [
+				{
+					"name": "All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/cocktail",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"cocktail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Random",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json()",
+									"pm.collectionVariables.set(\"latestCocktail\", jsonData.name);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/cocktail/random",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"cocktail",
+								"random"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "By Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/cocktail/{{latestCocktail}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"cocktail",
+								"{{latestCocktail}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recipe",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/cocktail/{{latestCocktail}}/recipe",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"cocktail",
+								"{{latestCocktail}}",
+								"recipe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ingredients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/cocktail/{{latestCocktail}}/ingredients",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"cocktail",
+								"{{latestCocktail}}",
+								"ingredients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add to menu",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/cocktail/{{latestCocktail}}/add",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"cocktail",
+								"{{latestCocktail}}",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/cocktail/health",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"cocktail",
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Patrons",
+			"item": [
+				{
+					"name": "All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/patron/",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"patron",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json()",
+									"pm.collectionVariables.set(\"patronId\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Franco\",\n    \"lastName\": \"Grobler\",\n    \"weight\": 88.5,\n    \"sex\": \"M\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/api/patron/",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"patron",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Franco\",\n    \"lastName\": \"Grobler\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/api/patron/2",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"patron",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add cocktail",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Franco\",\n    \"lastName\": \"Grobler\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/api/patron/{{patronId}}?cocktail={{latestCocktail}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"patron",
+								"{{patronId}}"
+							],
+							"query": [
+								{
+									"key": "cocktail",
+									"value": "{{latestCocktail}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/patron/{{patronId}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"patron",
+								"{{patronId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseURL}}/api/health",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"api",
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseURL",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "latestCocktail",
+			"value": "Clove%20Cocktail"
+		},
+		{
+			"key": "patronId",
+			"value": "1"
+		}
+	]
+}
