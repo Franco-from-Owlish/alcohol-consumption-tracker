@@ -1,12 +1,16 @@
 import type { AxiosError } from 'axios'
 
 type ErrorName =
-  | 'GET_RANDOM_COCKTAIL';
+  | 'GET_RANDOM_COCKTAIL'
+  | 'CREATE_PATRON'
+  | 'GET_ALL_PATRONS'
+  | 'GET_PATRON'
+  | 'DELETE_PATRON';
 
 export class ApiError extends Error {
   name: ErrorName
   message: string
-  response: object
+  response: Record<string,string|string[]>
   cause: AxiosError
 
   constructor(
@@ -16,7 +20,7 @@ export class ApiError extends Error {
     super();
     this.name = name;
     this.message = message;
-    this.response = cause.response?.data as object;
+    this.response = cause.response?.data as Record<string,string|string[]>;
     this.cause = cause;
   }
 }

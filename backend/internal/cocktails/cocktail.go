@@ -2,6 +2,7 @@ package cocktail
 
 import (
 	"alcohol-consumption-tracker/pkg/database"
+	"encoding/json"
 )
 
 type Cocktail struct {
@@ -35,4 +36,23 @@ type CocktailsService interface {
 	GetCocktailRecipe(cocktail *Cocktail) ([]map[string]interface{}, error)
 	AddToMenu(name string) error
 	UpdateCocktailAlcoholContent(cocktail *Cocktail) error
+}
+
+func (r *Cocktail) MarshalJSON() ([]byte, error) {
+	type CocktailJSON Cocktail
+	if r.Recipe.ID == 0 {
+		pJSON := struct {
+			Recipe bool `json:"recipe,omitempty"`
+			CocktailJSON
+		}{
+			CocktailJSON: CocktailJSON(*r),
+		}
+		return json.Marshal(&pJSON)
+	}
+	pJSON := struct {
+		CocktailJSON
+	}{
+		CocktailJSON: CocktailJSON(*r),
+	}
+	return json.Marshal(&pJSON)
 }

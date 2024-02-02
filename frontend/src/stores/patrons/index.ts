@@ -1,12 +1,16 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import type { Patron } from '@/modules/api/patrons/types'
 
 export const usePatronStore = defineStore('patron', () => {
-  const count = ref(0)
-  const doubleCount = computed(() => count.value * 2)
-  function increment() {
-    count.value++
+  const patrons = ref<Patron[]>()
+
+  function removePatron(id: string) {
+    const idx = patrons.value?.findIndex(x => x.id === id)
+    if (idx && (idx >= 0)) {
+      patrons.value?.splice(idx, 1)
+    }
   }
 
-  return { count, doubleCount, increment }
+  return { patrons, removePatron }
 })

@@ -1,9 +1,9 @@
 <template>
   <main>
-    <TheWelcome />
+    <AllPatrons />
   </main>
 </template>
 
 <script setup lang="ts">
-import TheWelcome from '@/components/TheWelcome.vue'
+import AllPatrons from '@/components/AllPatrons.vue'
 </script>
